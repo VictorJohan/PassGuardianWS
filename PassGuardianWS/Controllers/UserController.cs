@@ -2,6 +2,7 @@
 using PassGuardianWS.Interfaces;
 using PassGuardianWS.Models;
 using PassGuardianWS.Service;
+using PassGuardianWS.Utils;
 
 namespace PassGuardianWS.Controllers
 {
@@ -10,6 +11,23 @@ namespace PassGuardianWS.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUser _user = new UserService();
+
+        [HttpPost("login")]
+        public IActionResult Login(User user)
+        {
+            ModelState.Clear();
+            Response responses = new Response();
+            var record = _user.Login(user);
+            if(record != null)
+            {
+                return Ok(record);
+            }
+            else
+            {
+                responses.Responses.Add("Access Denied", "The password or the user name is incorrect");
+                return BadRequest(responses);
+            }
+        }
 
         [HttpPost("save")]
         public ActionResult Save(User user)

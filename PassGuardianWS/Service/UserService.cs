@@ -59,5 +59,12 @@ namespace PassGuardianWS.Service
             else
                 return Update(user);
         }
+
+        public User Login(User entity)
+        {
+            string sql = "SELECT u.UserID, u.UserName FROM Users u WHERE u.UserName = @UserName AND u.Password = @Password";
+            User user = conexion.DapperConexion.QueryFirstOrDefault<User>(sql, entity);
+            return user;
+        }
     }
 }
